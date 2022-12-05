@@ -1,6 +1,9 @@
 import typing
 
-encryptedMessage = 163077576587089932277514178989798339755826189700674110151160860819557757512053108465634676999401755817425637794522932574265893488854028596522889419543378155476439015236106447427921542963150735762104095795184542
+C = 163077576587089932277514178989798339755826189700674110151160860819557757512053108465634676999401755817425637794522932574265893488854028596522889419543378155476439015236106447427921542963150735762104095795184542
+P = 435958568325940791799951965387214406385470910265220196318705482144524085345275999740244625255428455944579
+𝑄 = 562545761726884103756277007304447481743876944007510545104946851094548396577479473472146228550799322939273
+E = 7
 
 
 def totient(P, Q):
@@ -18,17 +21,16 @@ def modularInverse(integer, modulo):
             return i
 
 
-def modularInverseV2(integer, modulo):
-
+def modularInverseV3(integer, modulo):
     def gcd(a, b):
         if a == 0:
-            return (b, 0, 1)
-        else:
-            y, x = gcd(b % a, a)
-            return (x-(b//a)*y, y)
+            return (0, 1)
+        y, x = gcd(b % a, a)
+        return (x - (b//a) * y, y)
 
     x, y = gcd(integer, modulo)
-    return x % modulo
+    result = x % modulo
+    return result
 
 
 def FME(base, exponent, modulo):
@@ -56,10 +58,11 @@ def decrypt(p: int, q: int, e: int, c: int) -> str:
     n = p*q
 
     psi = totient(p, q)
-    inverseE = modularInverseV2(e, psi)
+    inverseE = modularInverseV3(e, psi)
     m = FME(c, inverseE, n)
 
     return numToString(m)
 
 
 # print("The original message was: ", decrypt(7, 11, 13, 5))
+# print("The original message was: ", decrypt(P, Q, E, C))
