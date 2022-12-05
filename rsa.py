@@ -18,6 +18,19 @@ def modularInverse(integer, modulo):
             return i
 
 
+def modularInverseV2(integer, modulo):
+
+    def gcd(a, b):
+        if a == 0:
+            return (b, 0, 1)
+        else:
+            y, x = gcd(b % a, a)
+            return (x-(b//a)*y, y)
+
+    x, y = gcd(integer, modulo)
+    return x % modulo
+
+
 def FME(base, exponent, modulo):
     result = 1
     while exponent > 1:
@@ -43,7 +56,7 @@ def decrypt(p: int, q: int, e: int, c: int) -> str:
     n = p*q
 
     psi = totient(p, q)
-    inverseE = modularInverse(e, psi)
+    inverseE = modularInverseV2(e, psi)
     m = FME(c, inverseE, n)
 
     return numToString(m)
